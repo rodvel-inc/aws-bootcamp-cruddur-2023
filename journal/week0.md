@@ -47,7 +47,12 @@ Well, these can be used as a foundation for the creation of the different diagra
 ### Diagrams
 
 ## Conceptual
+Link to the diagram [here](https://lucid.app/lucidchart/15b4a5b2-ec2c-4d83-99d8-0460fbf2922a/edit?viewport_loc=3010%2C420%2C2219%2C1041%2C0_0&invitationId=inv_b4f59066-61e6-485e-9bec-f016a8d141d4).
 
 ![Conceptual design](/_docs/assets/conceptual.jpg "Conceptual design")
 
 ## Logical
+Link to the diagram [here](https://lucid.app/lucidchart/c333b586-db78-4a7d-b6dd-8f22d17a8c83/edit?viewport_loc=-533%2C-66%2C4992%2C2343%2CV3dxByeoB0H6&invitationId=inv_fe3cd5fc-e7fa-44f8-ae98-850c76912554).
+
+![Logical design](/_docs/assets/logical.jpg "Logical design")
+
