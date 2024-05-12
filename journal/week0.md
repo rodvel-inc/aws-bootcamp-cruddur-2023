@@ -47,5 +47,5 @@ Well, these can be used as a foundation for the creation of the different diagra
 ### Diagrams
 
 ## Conceptual
-![Conceptual design] (/assets/images/conceptual.jpg "Conceptual design")
+![Conceptual design] (docs_/assets/images/conceptual.jpg "Conceptual design")
 ## Logical
