@@ -1,26 +1,28 @@
-version: "3.8"
-services:
-  backend-flask:
-    environment:
-      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
-      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
-    build: ./backend-flask
+version: "3.8" # Docker Compose file version
+
+services: # Definition of services to be run in Docker containers
+  backend-flask: # Service for the Flask backend application
+    environment: # Environment variables passed to the container
+      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the frontend React application
+      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the Flask backend application
+    build: ./backend-flask  # Specifies the build context for the backend service inside the /backend-flask folder, the Dockerfile
     ports:
-      - "4567:4567"
+      - "4567:4567" # Maps port 4567 on the host to port 4567 in the container
     volumes:
-      - ./backend-flask:/backend-flask
-  frontend-react-js:
-    environment:
-      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
-    build: ./frontend-react-js
+      - ./backend-flask:/backend-flask # Maps the local directory ./backend-flask to /backend-flask in the container
+  
+  frontend-react-js: # Service for the React frontend application
+    environment: # Environment variables passed to the container
+      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the Flask backend application
+    build: ./frontend-react-js # Specifies the build context for the frontend service
     ports:
-      - "3000:3000"
+      - "3000:3000" # Maps port 3000 on the host to port 3000 in the container
     volumes:
-      - ./frontend-react-js:/frontend-react-js
+      - ./frontend-react-js:/frontend-react-js # Maps the local directory ./frontend-react-js to /frontend-react-js in the container
 
 # the name flag is a hack to change the default prepend folder
 # name when outputting the image names
 networks: 
-  internal-network:
-    driver: bridge
-    name: cruddur
+  internal-network: # Internal network for communication between containers
+    driver: bridge # Specifies the network driver as bridge
+    name: cruddur # Name of the network
