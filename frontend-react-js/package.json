@@ -1,15 +1,13 @@
 {
-  // Name of the project
   "name": "frontend",
   
-  // Version of the project
+  
   "version": "0.1.0",
   
-  // Indicates that the package is private and should not be published to npm registry
+  
   "private": true,
   
-  // Dependencies required for the project
-  // These packages are external libraries or modules that your project uses, typically installed via npm.
+  
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
