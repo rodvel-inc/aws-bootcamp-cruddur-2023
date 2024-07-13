@@ -1,13 +1,17 @@
-openapi: '3.0.2'
-info:
+# This OpenAPI (formerly known as Swagger) file describes the structure and endpoints of a RESTful API named "Cruddur Backend API"
+# This OpenAPI file serves as a blueprint for developers, specifying endpoints, methods, parameters, request/response structures, and schemas used in the API. 
+# It promotes consistency, clarity, and ease of integration when developing or consuming the API.
+
+openapi: '3.0.2' #Specifies that this API conforms to the OpenAPI Specification version 3.0.2.
+info: #Provides metadata about the API: title is the name of the API, and version is its version number.
   title: Cruddur Backend API
   version: '1.0'
     
-servers:
+servers: #Lists the base URL(s) of the API server(s). Here, the API is hosted at https://api.server.test/v1.
   - url: https://api.server.test/v1
 paths:
-  /api/activities/home:
-    get:
+  /api/activities/home: #Defines specific endpoints under /api/activities/home.
+    get: #Specifies that a GET request to this endpoint returns a list (array) of activities (Activity schema).
       description: 'Return a feed of activity based on all users'
       tags:
         - activities
@@ -16,16 +20,16 @@ paths:
           description: Returns an array of activities"
           content:
             application/json:
-              schema:
+              schema: #Uses components defined under schemas for the response structure.
                 type: array
                 items:
                   $ref: '#/components/schemas/Activity'
-  /api/activities/search:
+  /api/activities/search: #Defines an endpoint /api/activities/search that accepts a GET request.
     get:
       description: 'Return a feed of activity based on a search term'
       tags:
         - activities
-      parameters:
+      parameters: #Requires a query parameter term of type string for searching activities.
         - name: term
           in: query
           description: Search term used for full text search
@@ -41,13 +45,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Activity'
-  /api/activities:
+                  $ref: '#/components/schemas/Activity' ##Sets the HTTP for successful requests (200 OK). The response body will be an array of activities (Activity schema).
+  /api/activities: #Specifies an endpoint /api/activities that accepts a POST request to create a new activity.
     post:
       description: Create a new activitiy eg. Creating a Crud
       tags:
         - activities
-      requestBody:
+      requestBody: #Requires a JSON object in the request body (handle, message, and ttl are expected fields).
         required: true
         content:
           application/json:
@@ -68,9 +72,9 @@ paths:
               schema:
                 type: object
                 items:
-                  $ref: '#/components/schemas/Activity'
-  /api/activities/@{handle}:
-    get:
+                  $ref: '#/components/schemas/Activity' #Sets the HTTP for successful requests (200 OK). The response body will be an array of activities (Activity schema).
+  /api/activities/@{handle}: #Defines an endpoint /api/activities/@{handle} where handle is a path parameter (username).
+    get: # GET request retrieves activities specific to the user identified by handle.
       description: 'Return a feed of activity for a specific user'
       tags:
         - activities
@@ -89,7 +93,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Activity'
+                  $ref: '#/components/schemas/Activity' #Sets the HTTP for successful requests (200 OK). The response body will be an array of activities (Activity schema).
   /api/message_groups:
     get:
       description: 'Return a list of two way private conversations for the user'
@@ -148,8 +152,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+  /api/activities/notifications:
+    get:
+      description: 'Returns a feed of activity for all people that I follow'
+      tags:
+        - activities
+      parameters: []
+      responses:
+        '200':
+          description: Returns an array of activities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
 
-components:
+components: #Defines reusable data structures (schemas) used throughout the API. Activity, Message, and MessageGroup are defined here with their respective properties.
   schemas:
     Activity:
       type: object
