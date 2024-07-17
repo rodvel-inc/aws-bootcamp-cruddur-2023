@@ -5,6 +5,9 @@ services: # Definition of services to be run in Docker containers
     environment: # Environment variables passed to the container
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the frontend React application
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the Flask backend application
+      OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io" # Open Telemetry config used by Honeycomb
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}" # Open Telemetry config used by Honeycomb
+      OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}" # Open Telemetry config used by Honeycomb
     build: ./backend-flask  # Specifies the build context for the backend service inside the /backend-flask folder, the Dockerfile
     ports:
       - "4567:4567" # Maps port 4567 on the host to port 4567 in the container
