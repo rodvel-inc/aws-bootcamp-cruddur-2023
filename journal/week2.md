@@ -17,7 +17,17 @@ For instance, as a request starts from the backend, it goes through different sy
 COnfiguration
 Using OTEL (open telemetry) env vars to send data into the Honeycomb workspace I created
 
-First, install the opentelemetry-api, using Python:
+Before anything, export the env vars that will be used later on by the docker-compose.yml file (or make sure that they are already there):
+
+```sh
+export HONEYCOMB_API_KEY=""
+export HONEYCOMB_SERVICE_NAME="backend-flask"
+gp env HONEYCOMB_API_KEY=""
+gp env HONEYCOMB_SERVICE_NAME="backend-flask"
+```
+The API KEY has to be generated at honeycomb.io
+
+Now, install the opentelemetry-api, using Python:
 
 pip install openetelemetry-api
 
