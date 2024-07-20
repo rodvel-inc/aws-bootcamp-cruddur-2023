@@ -85,6 +85,48 @@ So far, I have tested that the commands that will be included in the `docker-com
 - It allows you to understand how your application and its underlying services are performing to identify and troubleshoot the root cause of performance issues and errors.
 - It provides an end-to-end view of requests as they travel through your application, and shows a map of your application's underlying components.
 
+### How to use it
+
+- Instrument your application, which allows X-Ray to track how your application processes a request.
+    - Use the X-Ray SDKs, APIs, or ClouWatch Application Signals to send trace data to X-Ray.
+- Optionally, configure X-Ray to work with other AWS Services that integrate with X-Ray.
+- Deploy your instrumented application.
+    - As your application receives requests, the SDK will record trace, segment and subsegment data.
+
+### Steps
+
+The X-Ray SDK for Python is a library for Python web applications that provides classes and methods for generating and sending trace data to the X-Ray daemon. 
+
+Trace data includes information about incoming HTTP requests served by the application, and calls that the application makes to downstream services using the AWS SDK, HTTP clients, or an SQL database connector. 
+
+- Install the AWS SDK (for Python, in this case) using the command:
+```sh
+pip install aws-xray-sdk
+```
+- An alternative to the instruction before this one, you can simply add the following instruction into the `requirements.txt` file.
+```sh
+aws-xray-sdk
+```
+
+- Intall the SDK's testing dependencies:
+```sh
+pip install tox
+```
+As with the SDK, this last instruction can also be added to the `requirements.txt` file.
+
+- If you use Flask, start by adding the SDK **`middleware`** to your application to trace incoming requests. 
+
+- The middleware creates a segment for each traced request, and completes the segment when the response is sent. 
+
+### Adding the middleware to your application (flask)
+
+- As with Honeycomb, you have to add code to the `app.py`.
+
+- To instrument your Flask application, first configure a segment name on the xray_recorder. 
+
+- Then, use the XRayMiddleware function to patch your Flask application in code.
+
+
 
 
 
