@@ -8,6 +8,8 @@ services: # Definition of services to be run in Docker containers
       OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io" # Open Telemetry config used by Honeycomb
       OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}" # Open Telemetry config used by Honeycomb
       OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}" # Open Telemetry config used by Honeycomb
+      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*" # X-Ray configuration
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000" # X-Ray configuration
     build: ./backend-flask  # Specifies the build context for the backend service inside the /backend-flask folder, the Dockerfile
     ports:
       - "4567:4567" # Maps port 4567 on the host to port 4567 in the container
@@ -22,6 +24,17 @@ services: # Definition of services to be run in Docker containers
       - "3000:3000" # Maps port 3000 on the host to port 3000 in the container
     volumes:
       - ./frontend-react-js:/frontend-react-js # Maps the local directory ./frontend-react-js to /frontend-react-js in the container
+  
+  xray-daemon: # Service for the AWS X-Ray Daemon
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "us-east-1"
+    command:
+      - "xray -o -b xray-daemon:2000"
+    ports:
+      - 2000:2000/udp
 
   dynamodb-local:
     # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa

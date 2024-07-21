@@ -95,6 +95,8 @@ So far, I have tested that the commands that will be included in the `docker-com
 
 ### Steps
 
+Of great importance here, is the fact that I will be using - for the very first time - the AWS SDK, specifically for Python.
+
 The X-Ray SDK for Python is a library for Python web applications that provides classes and methods for generating and sending trace data to the X-Ray daemon. 
 
 Trace data includes information about incoming HTTP requests served by the application, and calls that the application makes to downstream services using the AWS SDK, HTTP clients, or an SQL database connector. 
@@ -114,7 +116,9 @@ pip install tox
 ```
 As with the SDK, this last instruction can also be added to the `requirements.txt` file.
 
-- If you use Flask, start by adding the SDK **`middleware`** to your application to trace incoming requests. 
+- If you use Flask, start by adding the SDK **`middleware`** to your application to trace incoming requests. The following diagram is a simple architecture that explains why there has to be a middleware sitting between the instrumentalized application (Cruddur) and X-Ray:
+
+![Middleware](/_docs/assets/xray-how-it-works.png "Middleware")
 
 - The middleware creates a segment for each traced request, and completes the segment when the response is sent. 
 
@@ -126,7 +130,57 @@ As with the SDK, this last instruction can also be added to the `requirements.tx
 
 - Then, use the XRayMiddleware function to patch your Flask application in code.
 
+### Setting up AWS X-Ray resources
 
+- In order to confiure the settings for a trace, I have included its metadata in file called `xray.json`.
+
+- In order to keep traces in an orderly fashion, I should create a Sampling Group in X-Ray:
+
+```sh
+aws xray create-group \
+   --group-name "Cruddur" \
+   --filter-expression "service(\"backend-flask\")"
+```
+In the AWS Console, this is the result:
+
+![Sampling Group](/_docs/assets/sampling-group.png "Sampling Group")
+
+- And then, create a sample that will be part of this group. Run the following command from the project's root folder, so that it fits the xray.json file's relative route:
+
+```sh
+aws xray create-sampling-rule --cli-input-json file://aws/json/xray.json
+```
+In the AWS Console, this is the result:
+
+![Sampling Rule](/_docs/assets/sampling-rule.png "Sampling Rule")
+
+### Install the X-Ray daemon
+
+- The AWS X-Ray daemon is a software application that listens for traffic on UDP port 2000, gathers raw segment data, and relays it to the AWS X-Ray API. 
+- The daemon works in conjunction with the AWS X-Ray SDKs and must be running so that data sent by the SDKs can reach the X-Ray service. 
+- It can run on-premises, locally or as a container.
+- The X-Ray daemon is an open source project.
+
+For the bootcamp, I will be using it as a Docker container and, as such, I will include it in the `docker-compose.yml`file:
+
+```yml
+  xray-daemon:
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "us-east-1"
+    command:
+      - "xray -o -b xray-daemon:2000"
+    ports:
+      - 2000:2000/udp
+```
+- Additionally, a couple of env vars have to be included in the backend container:
+
+```yml
+      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+```
 
 
 

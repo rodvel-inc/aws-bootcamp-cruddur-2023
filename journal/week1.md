@@ -45,11 +45,19 @@ docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-
 
 Adhering to the same principle used in the backend section, I now will test everyhting from the command line before creating the frontend's `Dockerfile`.
 
-The very first thing to do is to install NPM in the host machine. The reason is that the container needs to copy the contents of `ǹode_modules` from this machine. Some people would argue this is a good practice if I want to keep my container as light as possible. So, from the command line in the host machine:
+The very first thing to do is to install NPM in the host machine. The reason is that the container needs to copy the contents of `node_modules` from this machine. Some people would argue this is a good practice if I want to keep my container as light as possible. So, from the command line in the host machine:
 
 ```sh
 cd frontend-react-js
 npm i
+```
+However, a way to make this permanent, instead of executing manually these 2 commands everytime a Gitpod workspace is launched is to add a section with the commands in the `.gitpod.yml`file, as shown here:
+
+```yml
+- name: react-js
+    command: |
+      cd frontend-react-js
+      npm i
 ```
 ### Add the Dockerfile
 
