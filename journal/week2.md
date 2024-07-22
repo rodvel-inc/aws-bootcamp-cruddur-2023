@@ -191,5 +191,4 @@ After all this configuration tasks, the results are successful:
 
 ![Sent sample](/_docs/assets/sent-trace.png "Sent sample")
 
-
-
+I seems that every endpoint needs its separate AWS X-Ray configuration. It means that, up to this point, only the aforementioned endpoint is sending samples.
