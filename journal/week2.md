@@ -182,7 +182,14 @@ For the bootcamp, I will be using it as a Docker container and, as such, I will 
       AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
 ```
 
+After all this configuration tasks, the results are successful:
 
+- I executed the containers using `docker compose up`.
+- I opened the `/api/activities/home` endpoint.
+- This action triggered the sending of an event to the AWS X-Ray daemon.
+- This sample was sent to the AWS X-Ray console:
+
+![Sent sample](/_docs/assets/sent-trace.png "Sent sample")
 
 
 
