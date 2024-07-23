@@ -16,7 +16,7 @@
 ### Honeycomb
 
 #### Configuration
-- Use `OTEL``(open telemetry) **env vars** to send data into the Honeycomb workspace I created.
+- Use `OTEL`(open telemetry) **env vars** to send data into the Honeycomb workspace I created.
 - Before anything, export the **env vars** that will be used later on by the `docker-compose.yml` file (or make sure that they are already there):
 `
 ```sh
@@ -192,3 +192,91 @@ After all this configuration tasks, the results are successful:
 ![Sent sample](/_docs/assets/sent-trace.png "Sent sample")
 
 I seems that every endpoint needs its separate AWS X-Ray configuration. It means that, up to this point, only the aforementioned endpoint is sending samples.
+
+## AWS CloudWatch logs
+
+Start by adding the software `Watchtower`, which is a log handler for AWS CloudWatch logs.
+It is a lighweight adapter between the **Python logging system** and CloudWatch logs.
+It uses the **boto3 AWS SDK**.
+It allows plugging the Python application logging directly into CloudWatch without the need to install a system-wide log collector like **awscli-cwlogs**.
+It aggregates logs into batches to avoid sending an API request per each log message, while guaranteeing a delivery deadline (60 seconds by default).
+
+### Step 1
+Add Watchtower to the file `requirements.txt`.
+
+### Step 2
+Run `pip install -r requirements.txt`.
+
+### Step 3
+Add **Watchtower** to the `app.py`file:
+
+```python
+import watchtower
+import logging
+from time import strftime
+```
+### Step 4
+Configure **logging** to use Cloudwatch:
+
+```python
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("some message")
+```
+### Step 5
+
+It is a good idea to log errors (also in `app.py`)
+
+```python
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
+```
+
+### Results
+
+After struggling for a long time with the configuration files `app.py`and `home_activities.py`, I finally managed to send the logs from **Watchtower** into **CloudWatch logs**:
+
+![CW Logs](/_docs/assets/cruddur_cwlogs.png "CW Logs")
+
+For the sake of being careful with the spend on AWS, I am turning off the logs:
+
+
+**`home_activities.py`**
+Working state:
+```python
+class HomeActivities:
+  def run(logger):
+    logger.info("HomeActivities")
+    now = datetime.now(timezone.utc).astimezone()
+    results = [{
+```
+Off state:
+```python
+class HomeActivities:
+  def run():
+    #logger.info("HomeActivities")
+    now = datetime.now(timezone.utc).astimezone()
+    results = [{
+```
+**`app.py`**
+Working state:
+```python
+@app.route("/api/activities/home", methods=['GET'])
+def data_home():
+  data = HomeActivities.run(logger=LOGGER)
+  return data, 200
+```
+Off state:
+```python
+@app.route("/api/activities/home", methods=['GET'])
+def data_home():
+  data = HomeActivities.run()
+  return data, 200
+```
