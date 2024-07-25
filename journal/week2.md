@@ -249,6 +249,7 @@ For the sake of being careful with the spend on AWS, I am turning off the logs:
 
 
 **`home_activities.py`**
+
 Working state:
 ```python
 class HomeActivities:
@@ -266,6 +267,7 @@ class HomeActivities:
     results = [{
 ```
 **`app.py`**
+
 Working state:
 ```python
 @app.route("/api/activities/home", methods=['GET'])
@@ -280,3 +282,4 @@ def data_home():
   data = HomeActivities.run()
   return data, 200
 ```
+
