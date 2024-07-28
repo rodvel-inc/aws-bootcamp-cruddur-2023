@@ -22,6 +22,12 @@ services: # Definition of services to be run in Docker containers
   frontend-react-js: # Service for the React frontend application
     environment: # Environment variables passed to the container
       REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" # URL for the Flask backend application
+      REACT_APP_AWS_PROJECT_REGION: "${AWS_DEFAULT_REGION}"
+      #REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID: ""
+      REACT_APP_AWS_COGNITO_REGION: "${AWS_DEFAULT_REGION}"
+      REACT_APP_AWS_USER_POOLS_ID: "us-east-1_Z32SFSMaX"
+      REACT_APP_CLIENT_ID: "5p9hit06dn9flskkfg70gorqe1"
+
     build: ./frontend-react-js # Specifies the build context for the frontend service
     ports:
       - "3000:3000" # Maps port 3000 on the host to port 3000 in the container
