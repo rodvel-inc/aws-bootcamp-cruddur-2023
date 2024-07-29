@@ -10,7 +10,7 @@ import ActivityForm from '../components/ActivityForm';
 import ReplyForm from '../components/ReplyForm';
 
 // [TODO] Authenication
-import Cookies from 'js-cookie'
+//import Cookies from 'js-cookie'
 
 export default function HomeFeedPage() {
   const [activities, setActivities] = React.useState([]);
@@ -57,25 +57,11 @@ const checkAuth = async () => {
   .catch((err) => console.log(err));
 };
 
-//  const checkAuth = async () => {
-//   console.log('checkAuth')
-    // [TODO] Authenication
-//    if (Cookies.get('user.logged_in')) {
-//      setUser({
-//        display_name: Cookies.get('user.name'),
-//        handle: Cookies.get('user.username')
-//      })
-//    }
-//  };
-
-  React.useEffect(()=>{
-    //prevents double call
-    if (dataFetchedRef.current) return;
-    dataFetchedRef.current = true;
-
-    loadData();
-    checkAuth();
-  }, [])
+// check when the page loads if we are authenicated
+React.useEffect(()=>{
+  loadData();
+  checkAuth();
+}, [])
 
   return (
     <article>

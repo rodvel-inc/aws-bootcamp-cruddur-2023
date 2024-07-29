@@ -1,2 +1,3 @@
 docker/dynamodb/*
 docker/**/*
+frontend-react-js/yarn.lock
