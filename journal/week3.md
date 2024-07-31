@@ -139,12 +139,7 @@ Broadly speaking, these are the steps that should be followed in order to have A
 | **2. Import Amplify into the *app.js* file** | Import the object from the aws-amplify library: `import { Amplify } from 'aws-amplify';`              |
 | **3. Connect Amplify with Cognito**        | Ensure that Amplify is correctly linked to my Cognito User Pool.                       |
 | **4. Add the *auth* module to the *homefeedpage.js* file** | In order to handle authentication and authorization.        |
-| **5. Install Amplify Libraries**         | Install the necessary AWS Amplify libraries to integrate authentication into your application.                 |
-| **6. Configure Amplify**                 | Configure Amplify with the settings from `aws-exports` in your main application file.                           |
-| **7. Implement Sign-Up Functionality**   | Use Amplify’s `Auth.signUp` method to handle user registration in your custom UI.                                |
-| **8. Implement Sign-In Functionality**    | Use Amplify’s `Auth.signIn` method to handle user login in your custom UI.                                        |
-| **9. Implement Sign-Out Functionality**   | Use Amplify’s `Auth.signOut` method to handle user logout in your custom UI.                                     |
-| **10. Manage Sessions**                  | Use Amplify to check user authentication status and protect routes or display content accordingly.               |
+| **5. Create the sign-in page**         | Self-explanatory.                 |
 
 
 
