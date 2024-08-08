@@ -45,29 +45,29 @@ services: # Definition of services to be run in Docker containers
     ports:
       - 2000:2000/udp
 
-  dynamodb-local:
+#  dynamodb-local:
     # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa
     # We needed to add user:root to get this working.
-    user: root
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
-    image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
-    ports: # Map port 8000 on the host to port 8000 on the container
-      - "8000:8000"
-    volumes: # Mount a local directory to store DynamoDB Local data
-      - "./docker/dynamodb:/home/dynamodblocal/data"
-    working_dir: /home/dynamodblocal  # Set working directory inside the container
+    #user: root
+    #command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    #image: "amazon/dynamodb-local:latest"
+    #container_name: dynamodb-local
+    #ports: # Map port 8000 on the host to port 8000 on the container
+    #  - "8000:8000"
+    #volumes: # Mount a local directory to store DynamoDB Local data
+    #  - "./docker/dynamodb:/home/dynamodblocal/data"
+    #working_dir: /home/dynamodblocal  # Set working directory inside the container
   
-  db:
-    image: postgres:13-alpine
-    restart: always # Always restart the PostgreSQL container if it stops
-    environment:  # Set environment variables for PostgreSQL username and password
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    ports:   # Map port 5432 on the host to port 5432 on the container
-      - '5432:5432'
-    volumes: # Use a named volume to persist PostgreSQL data
-      - db:/var/lib/postgresql/data
+  #db:
+    #image: postgres:13-alpine
+    #restart: always # Always restart the PostgreSQL container if it stops
+    #environment:  # Set environment variables for PostgreSQL username and password
+    #  - POSTGRES_USER=postgres
+    #  - POSTGRES_PASSWORD=password
+    #ports:   # Map port 5432 on the host to port 5432 on the container
+    #  - '5432:5432'
+    #volumes: # Use a named volume to persist PostgreSQL data
+    #  - db:/var/lib/postgresql/data
 
 # the name flag is a hack to change the default prepend folder
 # name when outputting the image names
@@ -76,6 +76,6 @@ networks:
     driver: bridge # Specifies the network driver as bridge
     name: cruddur # Name of the network
 
-volumes: # Define a named volume for PostgreSQL data persistence
-  db:  # Use local driver for the named volume
-    driver: local
+#volumes: # Define a named volume for PostgreSQL data persistence
+  #db:  # Use local driver for the named volume
+    #driver: local
