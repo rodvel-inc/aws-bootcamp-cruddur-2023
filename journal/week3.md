@@ -141,6 +141,57 @@ Broadly speaking, these are the steps that should be followed in order to have A
 | **4. Add the *auth* module to the *homefeedpage.js* file** | In order to handle authentication and authorization.        |
 | **5. Create the sign-in page**         | Self-explanatory.                 |
 
+### Summary of this section
+At the frontend layer, at this point, I have implemented / tested successfully:
+- A user pool in Cognito.
+- A *public client* to integrate my app's frontend with the user pool. 
+- A customized sign-up page.
+- A customized sign-in page.
+- The password recovery functionality.
+- Storing locally the access token (jwToken,retrieved from Cognito).
+
+### Next steps
+Passing the jwToken, along with the API calls, to the backend layer.
+
+## The logic behind this
+In the file **`homefeedpage.js`** I have a configuration that is linked directly to the **/api/activities/home** API endpoint.
+
+In this file, I am declaring that the jwToken must be passed along when the API endpoint call is made.
+
+Other files, such as **`notificationsfeedpage.js`**, also have the same approach.
+
+If a user is correctly authenticated by Cognito, the jwtoken is generated, and the content that is to be loaded when the authentication is successful, appears in the corresponding section in the frontend. 
+
+But this content is loaded from the backend, requesting it with the 'GET' method.
+
+How to connect the backend and the frontend?
+
+### Enter CORS
+One of the strangest concepts that I have come across in this bootcamp is CORS.
+
+#### Cross-Origin Resource Sharing
+- Imagine you are visiting a website, **`example.com`**.
+- This site includes a script that wants to get data from another website, **`api.anothersite.com`**.
+- Normally, browsers will block these kinds of cross-origin requests for security reasons to prevent malicious websites from stealing sensitive data.
+- However, if **`api.anothersite.com`** wants to allow requests from **`example.com`**, it can do so by adding special headers to its responses.
+- These headers tell the browser, "It is OK for **`example.com`** to access my data."
+
+#### How it works:
+1. Simple request:
+
+If **`example.com`** makes a simple request to **`api.anothersite.com`**, and if this server has set the *Access-Control-Allow-Origin* header to **`*`** or to **`example.com`**, the browser will allow the request.
+
+2. Preflight request:
+
+- For more complex requests (e.g., ones with custom headers like **`Authorization`**), the browser first sends an "OPTIONS" request (a preflight request) to **`api.anothersite.com`** to check if it allows the actual request. 
+- The server responds with headers like *Access-Control-Allow-Headers* and *Access-Control-Allow-Methods*, indicating which methods and headers are allowed.
+- In my web application, respectively, I am allowing:
+    - headers=['Content-Type', 'Authorization'],
+    - methods="OPTIONS,GET,HEAD,POST"
+- This means that every method will have to be authorized, by carrying the jwToken along with the API call, to be successful.
+
+
+
 
 
 
